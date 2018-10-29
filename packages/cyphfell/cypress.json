@@ -1,0 +1,13 @@
+{
+  "projectId": "4b7341",
+  "chromeWebSecurity": false,
+  "fixturesFolder": "test-automation/cypress/fixtures",
+  "integrationFolder": "test-automation/cypress/integration",
+  "pluginsFile": "test-automation/cypress/plugins/index.js",
+  "screenshotsFolder": "test-automation/cypress/screenshots",
+  "supportFile": "test-automation/cypress/support/index.js",
+  "videosFolder": "test-automation/cypress/videos",
+  "defaultCommandTimeout": 15000,
+  "pageLoadTimeout": 60000,
+  "baseUrl": "http://localhost:3000/"
+}

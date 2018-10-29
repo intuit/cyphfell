@@ -1,0 +1,12 @@
+{
+  "projectId": "4b7341",
+  "chromeWebSecurity": false,
+  "fixturesFolder": "test/cypress/fixtures",
+  "integrationFolder": "test/cypress/integration",
+  "pluginsFile": "test/cypress/plugins/index.js",
+  "screenshotsFolder": "test/cypress/screenshots",
+  "supportFile": "test/cypress/support/index.js",
+  "videosFolder": "test/cypress/videos",
+  "defaultCommandTimeout": 15000,
+  "pageLoadTimeout": 60000
+}

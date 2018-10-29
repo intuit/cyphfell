@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.32.1/react-bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <style>
+        .functionDefinition {
+            white-space: pre-wrap;
+        }
+
+        .green {
+            color: darkgreen;
+        }
+
+        .red {
+            color: red;
+        }
+
+        .issue {
+            color: #7400ff;
+        }
+    </style>
+</head>
+<body>
+    <div id="cyphfell-root">
+    </div>
+
+    <script type="text/babel">
+        // React components being used
+        const Tabs = ReactBootstrap.Tabs,
+            Tab = ReactBootstrap.Tab,
+            Navbar = ReactBootstrap.Navbar,
+            Panel = ReactBootstrap.Panel,
+            ListGroup = ReactBootstrap.ListGroup,
+            ListGroupItem = ReactBootstrap.ListGroupItem;
+
+        // template variables that are replaced with runtime data generated from running the conversion tool
+        const CYPHFELL_VERSION = CYPHFELL-VERSION-TEMPLATE;
+
+        // configuration
+        const CONFIGURATION_PROPERTIES = CONFIG-PROPS-TEMPLATE;
+
+        // summary statistics
+        const SUCCESSFULLY_TRANSFORMED = SUCCESSFULLY-CONVERTED-TEMPLATE,
+            CRITICAL_FAILURES_COUNT = CRITICAL-FAILURES-COUNT-TEMPLATE,
+            TRANSFORM_WARNINGS_COUNT = TRANSFORM-WARNINGS-COUNT-TEMPLATE,
+            TRANSFORM_FAILURES_COUNT = TRANSFORM-FAILURES-COUNT-TEMPLATE;
+
+        // errors that prevent a file from being transformed
+        const CRITICAL_FAILURES = CRITICAL-FAILURE-DETAILS-TEMPLATE;
+
+        // line transformation problems
+        const LINE_TRANSFORMATION_ERRORS = TRANSFORMATION-ERRORS-TEMPLATE;
+
+        // warnings that must be manually resolved
+        const TRANSFORMATION_WARNINGS = WARNINGS-TEMPLATE;
+
+        class ConfigurationView extends React.Component {
+
+            renderConfig(obj) {
+                if (typeof obj.value === "string" && obj.isFunctionDefinition) {
+                    return (
+                        <Panel>
+                            <Panel.Heading>
+                                <Panel.Title componentClass="h3">{obj.name}</Panel.Title>
+                            </Panel.Heading>
+                            <Panel.Body className="functionDefinition">
+                                {obj.value}
+                            </Panel.Body>
+                        </Panel>
+                    );
+                } else if (Array.isArray(obj.value)) {
+                    return (
+                        <div>
+                            <h4>
+                                {obj.name}
+                            </h4>
+                            <ListGroup>
+                                {
+                                    obj.value.map((item, i) => <ListGroupItem key={i}>{item}</ListGroupItem>)
+                                }
+                            </ListGroup>
+                        </div>
+                    );
+                }
+                return <h4>{`${obj.name}: ${obj.value}`}</h4>;
+            }
+
+            render() {
+                return (
+                    CONFIGURATION_PROPERTIES.map((obj) => {
+                        return (
+                            <div key={obj.name}>
+                                {
+                                    this.renderConfig(obj)
+                                }
+                            </div>
+                        );
+                    })
+                );
+            }
+        }
+
+        class SummaryView extends React.Component {
+
+            render() {
+                return (
+                    <div>
+                        <h3 className="green">{SUCCESSFULLY_TRANSFORMED} files successfully transformed</h3>
+                        <h3 className="red">{CRITICAL_FAILURES_COUNT} files ran into critical errors</h3>
+                        <h3 className="red">{TRANSFORM_FAILURES_COUNT} lines had transformation failures</h3>
+                        <h3 className="issue">{TRANSFORM_WARNINGS_COUNT} potential issues found</h3>
+                    </div>
+                );
+            }
+
+        }
+
+        class CriticalErrorsListView extends React.Component {
+
+            render() {
+                return (
+                    <div>
+                        {
+                            CRITICAL_FAILURES.map((failure, i) => {
+                                return (
+                                    <Panel key={i} bsStyle="danger" style={{marginTop: 10}}>
+                                        <Panel.Heading>
+                                            <Panel.Title componentClass="h3">{failure.filePath}</Panel.Title>
+											<Panel.Title componentClass="h3">{failure.newFilePath}</Panel.Title>
+                                        </Panel.Heading>
+                                        <Panel.Body className="functionDefinition">
+                                            {failure.stackTrace}
+                                        </Panel.Body>
+                                    </Panel>
+                                );
+                            })
+                        }
+                    </div>
+                );
+            }
+
+        }
+
+        class TransformationErrorsListView extends React.Component {
+
+            render() {
+                return (
+                    <div>
+                        {
+                            LINE_TRANSFORMATION_ERRORS.map((failure, i) => {
+                                return (
+                                    <Panel key={i} bsStyle="danger" style={{marginTop: 10}}>
+                                        <Panel.Heading>
+                                            <Panel.Title componentClass="h3">{failure.filePath}</Panel.Title>
+											<Panel.Title componentClass="h3">{failure.newFilePath}</Panel.Title>
+                                        </Panel.Heading>
+                                        <Panel.Body className="functionDefinition">
+                                            {
+                                                failure.errors.map((error, index) => {
+                                                    return (
+                                                        <div key={index}>
+                                                            <p>
+                                                                {error.message}
+                                                            </p>
+                                                            <p>
+                                                                {error.line}
+                                                            </p>
+                                                            <br />
+                                                        </div>
+                                                    );
+                                                })
+                                            }
+                                        </Panel.Body>
+                                    </Panel>
+                                );
+                            })
+                        }
+                    </div>
+                );
+            }
+        }
+
+        class WarningsListView extends React.Component {
+
+            render() {
+                return (
+                    <div>
+                        {
+                            TRANSFORMATION_WARNINGS.map((warning, i) => {
+                                return (
+                                    <Panel key={i} bsStyle="warning" style={{marginTop: 10}}>
+                                        <Panel.Heading>
+                                            <Panel.Title componentClass="h3">{warning.filePath}</Panel.Title>
+											<Panel.Title componentClass="h3">{warning.newFilePath}</Panel.Title>
+                                        </Panel.Heading>
+                                        <Panel.Body className="functionDefinition">
+                                            {
+                                                warning.warnings.map((details, index) => {
+                                                    return (
+                                                        <div key={index}>
+                                                            <p>
+                                                                {"Line " + details.lineNumber}
+                                                            </p>
+                                                            <p>
+                                                                {details.message}
+                                                            </p>
+                                                            <p>
+                                                                {details.code}
+                                                            </p>
+                                                            <br />
+                                                        </div>
+                                                    );
+                                                })
+                                            }
+                                        </Panel.Body>
+                                    </Panel>
+                                );
+                            })
+                        }
+                    </div>
+                );
+            }
+        }
+
+        class MainView extends React.Component {
+
+            render() {
+                return (
+                    <div>
+                        <Navbar>
+                            <Navbar.Header>
+                                <Navbar.Brand>
+                                    Cyphfell
+                                </Navbar.Brand>
+                            </Navbar.Header>
+                        </Navbar>
+
+                        <Tabs
+                            defaultActiveKey={1}
+                            id="details-tab"
+                            style={{
+                                marginLeft: 15
+                            }}
+                        >
+                            <Tab eventKey={1} title="Configuration">
+                                <ConfigurationView />
+                            </Tab>
+                            <Tab eventKey={2} title="Summary">
+                                <SummaryView />
+                            </Tab>
+                            <Tab eventKey={3} title="Critical Errors">
+                                <CriticalErrorsListView />
+                            </Tab>
+                            <Tab eventKey={4} title="Transformation Errors">
+                                <TransformationErrorsListView />
+                            </Tab>
+                            <Tab eventKey={5} title="Warnings">
+                                <WarningsListView />
+                            </Tab>
+                        </Tabs>
+
+                        <Navbar>
+                            <Navbar.Header>
+                                <Navbar.Brand>
+                                    Adil Malik, Raj Vasikarla, Intuit (v{CYPHFELL_VERSION})
+                                </Navbar.Brand>
+                            </Navbar.Header>
+                        </Navbar>
+                    </div>
+                )
+            }
+
+        }
+
+        ReactDOM.render(<MainView />, document.getElementById("cyphfell-root"));
+    </script>
+</body>
+</html>

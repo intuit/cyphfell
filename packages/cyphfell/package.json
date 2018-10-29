@@ -1,0 +1,43 @@
+{
+  "name": "@intu/cyphfell",
+  "version": "0.2.3",
+  "description": "Converts automation tests into Cypress format",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --recursive --g \"./test/**/*.js\"  test",
+    "start": "cd ../cyphfell-test-app && export BROWSER='none' && yarn start && cd ../Cyphfell"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache License 2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/intuit/cyphfell.git#master"
+  },
+  "dependencies": {
+    "@babel/core": "^7.0.0-rc.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-rc.1",
+    "babel-plugin-syntax-object-rest-spread": "^6.13.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
+    "command-line-args": "^5.0.2",
+    "css-what": "^2.1.0",
+    "cypress": "^3.1.0",
+    "escodegen": "^1.11.0",
+    "eslint": "^5.6.1",
+    "esprima": "^4.0.1",
+    "estraverse": "^4.2.0",
+    "fs-extra": "^7.0.0",
+    "glob": "^7.1.3",
+    "lodash": "^4.17.10",
+    "relative": "^3.0.2",
+    "stack-trace": "^0.0.10",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "rewire": "^4.0.1",
+    "sinon": "6.1.2"
+  }
+}
