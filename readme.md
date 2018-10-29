@@ -1,3 +1,5 @@
+<img src="https://www.intuit.com/content/dam/intuit/intuitcom/company/images/logo-intuit-preferred.png" alt="drawing" width="200"/>
+
 # Cyphfell
 
 ### Converts WDIO automation tests to Cypress
