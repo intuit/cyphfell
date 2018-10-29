@@ -17,7 +17,7 @@
 import "./commands";
 import "./frameworkCommands";
 
-const arrays = require("@intu/cyphfell/src/CypressArrayUtil.js");
+const arrays = require("@intuit/cyphfell/src/CypressArrayUtil.js");
 arrays.init();
 
 // keep local storage data after each test

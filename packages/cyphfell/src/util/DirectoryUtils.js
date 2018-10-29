@@ -109,11 +109,11 @@ class DirectoryUtils {
 			fs.mkdirSync(path.join(cyDir, "/plugins/"));
 			fs.mkdirSync(path.join(cyDir, "/support/"));
 			fs.mkdirSync(path.join(cyDir, "/screenshots/"));
-			fs.writeFileSync(path.join(cyDir, "/plugins/index.js"), fs.readFileSync(`${process.cwd()}/node_modules/@intu/cyphfell/defaultFiles/defaultPluginFile.js`, "utf8"));
-			fs.writeFileSync(path.join(cyDir, "/support/index.js"), fs.readFileSync(`${process.cwd()}/node_modules/@intu/cyphfell/defaultFiles/defaultSupportFile.js`, "utf8") + supportAppend);
-			fs.writeFileSync(path.join(cyDir, "/support/commands.js"), fs.readFileSync(`${process.cwd()}/node_modules/@intu/cyphfell/defaultFiles/defaultCommandsFile.js`, "utf8"));
+			fs.writeFileSync(path.join(cyDir, "/plugins/index.js"), fs.readFileSync(`${process.cwd()}/node_modules/@intuit/cyphfell/defaultFiles/defaultPluginFile.js`, "utf8"));
+			fs.writeFileSync(path.join(cyDir, "/support/index.js"), fs.readFileSync(`${process.cwd()}/node_modules/@intuit/cyphfell/defaultFiles/defaultSupportFile.js`, "utf8") + supportAppend);
+			fs.writeFileSync(path.join(cyDir, "/support/commands.js"), fs.readFileSync(`${process.cwd()}/node_modules/@intuit/cyphfell/defaultFiles/defaultCommandsFile.js`, "utf8"));
 			const dirRegex = new RegExp(regex.formatRegex("test/cypress"), "g");
-			const cypressJson = JSON.parse(fs.readFileSync(`${process.cwd()}/node_modules/@intu/cyphfell/defaultFiles/defaultConfigFile.json`, "utf8").replace(dirRegex, cypressFolder));
+			const cypressJson = JSON.parse(fs.readFileSync(`${process.cwd()}/node_modules/@intuit/cyphfell/defaultFiles/defaultConfigFile.json`, "utf8").replace(dirRegex, cypressFolder));
 			if (fs.existsSync(`${process.cwd()}/cypress.json`)) {
 				const existingJson = JSON.parse(fs.readFileSync(`${process.cwd()}/cypress.json`, "utf8"));
 				Object.assign(cypressJson, existingJson);

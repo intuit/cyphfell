@@ -38,7 +38,7 @@ describe("Test FilePathUtil module", function() {
 
 	it("Tests findLocalFilePath when not testing", () => {
 		process.env.TESTING_LOCALLY = "";
-		expect(fp.findLocalFilePath("defaultFiles/commands.json")).to.be.equal(`${process.cwd()}/node_modules/@intu/cyphfell/defaultFiles/commands.json`);
+		expect(fp.findLocalFilePath("defaultFiles/commands.json")).to.be.equal(`${process.cwd()}/node_modules/@intuit/cyphfell/defaultFiles/commands.json`);
 	});
 
 	it("Tests findAbsolutePathToImport function", () => {

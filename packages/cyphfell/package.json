@@ -1,5 +1,5 @@
 {
-  "name": "@intu/cyphfell",
+  "name": "@intuit/cyphfell",
   "version": "0.2.3",
   "description": "Converts automation tests into Cypress format",
   "main": "index.js",

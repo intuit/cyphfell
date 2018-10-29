@@ -19,7 +19,7 @@ class PluginsUtil {
      * @param {String} pattern - the glob pattern to use to load default plugins
      * @return {Array<BasePlugin>} - all activated plugins
      */
-	static getActivatedPlugins(extraPlugins, disabledDefaultPlugins, pattern = "./node_modules/@intu/cyphfell/src/plugins/*") {
+	static getActivatedPlugins(extraPlugins, disabledDefaultPlugins, pattern = "./node_modules/@intuit/cyphfell/src/plugins/*") {
 		const framework = require("../converters/ActiveConverter").getStrategy().getName();
 		return this.loadPlugins(pattern).filter((plugin) => {
 			return !disabledDefaultPlugins.some((id) => plugin.getName() === id);

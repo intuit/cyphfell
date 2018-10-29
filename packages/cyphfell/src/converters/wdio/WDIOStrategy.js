@@ -72,7 +72,7 @@ class WDIOStrategy extends BaseStrategy {
 	getSupportAppendText() {
 		return `
 // initialize global browser object
-const initBrowser = require("@intu/cyphfell/src/converters/wdio/InitializeBrowserFunctions.js");
+const initBrowser = require("@intuit/cyphfell/src/converters/wdio/InitializeBrowserFunctions.js");
 initBrowser.init("browser");
 Cypress.on("window:load", (win) => {
 	initBrowser.initConsoleLog(browser, consoleSpies);

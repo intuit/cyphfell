@@ -33,7 +33,7 @@ class FilePathUtil {
 		if (process.env.TESTING_LOCALLY === "true") {
 			return `${process.cwd()}/${localPath}`;
 		}
-		return `${process.cwd()}/node_modules/@intu/cyphfell/${localPath}`;
+		return `${process.cwd()}/node_modules/@intuit/cyphfell/${localPath}`;
 	}
 
 	/**
