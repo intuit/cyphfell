@@ -42,7 +42,7 @@ module.exports = (lines, fileDir, options, plugins) => {
 			const res = handler.handleParseAttempt(lines, fileDir, plugins);
 			if (res) {
 				//return res.replace(/;\s*?;/g, ";");
-				return res.replace(/\s+;\s/g, "");
+				return res.replace(/\s+;\s/g, "\n");
 			} else if (lines === "" && handler.canHandle(fileDir)) {
 				return "";
 			}

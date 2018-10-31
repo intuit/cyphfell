@@ -261,7 +261,12 @@ const formClosure = (node, timesUsed, filterCallback, variables) => {
 class EsprimaUtils {
 
 	static generateCodeFromAST(ast) {
-		return undoReplaceTemporaryStrings(codegen.generate(ast, {format: {quotes: "double"}}));
+		return undoReplaceTemporaryStrings(codegen.generate(ast, {
+			format: {
+				quotes: "double",
+                newline: '\n'
+			}
+		}));
 	}
 
 	static generateAST(str, includeLineNumbers = false) {
