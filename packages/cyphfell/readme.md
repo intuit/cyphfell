@@ -22,7 +22,7 @@ Note that depending on the complexity of your files, the conversion process may 
 
 ##### Imported Node Module  
 1. cd PROJECT_ROOT_DIRECTORY  
-2. yarn add @intuit/cyphfell -D  
+2. yarn add cyphfell -D  
 3. Create a file that calls the function exported by [index.js](https://github.com/intuit/cyphfell/blob/master/packages/cyphfell/index.js) of this project, similar to how [cli.js](https://github.com/intuit/cyphfell/blob/master/packages/cyphfell/cli.js) does it.  
 The first argument is any option overrides to use, and the second option is any external AST altering plugins to activate.  
 4. Run your new file from the command line with  
@@ -30,8 +30,8 @@ The first argument is any option overrides to use, and the second option is any 
 
 ##### CLI  
 1. cd PROJECT_ROOT_DIRECTORY  
-2. yarn add @intuit/cyphfell -D  
-3. node ./node_modules/@intuit/cyphfell/cli.js 
+2. yarn add cyphfell -D  
+3. node ./node_modules/cyphfell/cli.js 
 
 **NOTE: If you are using the CLI, make sure to pass in -v as an argument. This will generate the support/index.js file that allows the conversion to be more complete**
 

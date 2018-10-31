@@ -1,5 +1,5 @@
 {
-  "name": "@intuit/cyphfell-debug-instrumentation",
+  "name": "cyphfell-debug-instrumentation",
   "version": "1.0.1",
   "description": "",
   "main": "index.js",
@@ -8,5 +8,6 @@
   },
   "keywords": [],
   "author": "",
-  "license": "Apache License 2.0"
+  "license": "Apache License 2.0",
+  "private": true
 }

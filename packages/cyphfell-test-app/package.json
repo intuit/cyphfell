@@ -1,5 +1,5 @@
 {
-  "name": "@intuit/cyphfell-test-app",
+  "name": "cyphfell-test-app",
   "version": "0.1.1",
   "dependencies": {
     "react": "^16.5.0",
@@ -19,5 +19,6 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
-  }
+  },
+  "private": true
 }

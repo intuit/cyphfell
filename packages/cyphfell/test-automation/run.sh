@@ -5,7 +5,7 @@ copy_support_file() {
     # replace the package name because that should only be used for modules that are dependent upon this one
     export TESTING_LOCALLY=true
     node ./test-automation/initSupport.js wdio test-automation/cypress/support/index.js test-automation/cypress/support/frameworkCommands.js
-    sed -i '' -e 's/@intuit\/cyphfell/\.\.\/\.\.\/\.\./g' test-automation/cypress/support/index.js
+    sed -i '' -e 's/cyphfell/\.\.\/\.\.\/\.\./g' test-automation/cypress/support/index.js
 }
 
 # TODO: consider using set -e instead of this method
@@ -30,7 +30,7 @@ fi
 # copy the necessary files for running automation
 cp ./defaultFiles/defaultPluginFile.js ./test-automation/cypress/plugins/index.js
 cp ./defaultFiles/defaultCommandsFile.js ./test-automation/cypress/support/commands.js
-sed -i '' -e 's/@intuit\/cyphfell/\.\.\/\.\.\/\.\./g' test-automation/cypress/support/commands.js
+sed -i '' -e 's/cyphfell/\.\.\/\.\.\/\.\./g' test-automation/cypress/support/commands.js
 copy_support_file
 
 # run automation
