@@ -51,6 +51,10 @@ module.exports = {
 						if (astInput.startsWith(".")) {
 							astInput = astInput.substring(1);
 						}
+						if ((astInput.match(/\)/g) || []).length !== (astInput.match(/\(/g) || []).length && result2[0].endsWith(")")) {
+							astInput = astInput.substr(0, astInput.length - 1);
+							result2[0] = result2[0].substr(0, result2[0].length - 1);
+						}
 						const ast = esprima.parse(astInput);
 						estraverse.traverse(ast, {
 							enter: (node) => {
@@ -81,7 +85,7 @@ module.exports = {
 									result[i + 1] = codegen.generate(ast.body[0].expression.arguments[i]);
 								}
 							} else if (ast.body[0].expression.callee && ast.body[0].expression.callee.type === "MemberExpression" && ast.body[0].expression.callee.object &&
-                                ast.body[0].expression.callee.object.type === "CallExpression") {
+								ast.body[0].expression.callee.object.type === "CallExpression") {
 								// chained call (ex: browser.element("").click();)
 								for (let i = 0; i < ast.body[0].expression.callee.object.arguments.length; ++i) {
 									result[i + 1] = codegen.generate(ast.body[0].expression.callee.object.arguments[i]);

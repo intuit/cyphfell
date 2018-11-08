@@ -90,6 +90,12 @@ class JavaScriptFileHandler extends AbstractFileHandler {
 		return line;
 	}
 
+	transformNode(node) {
+		const str = this.transformLine(esprima.generateCodeFromAST(node));
+		esprima.overwriteNode(node, esprima.generateAST(str).body[0].expression);
+		node.transformed = true;
+	}
+
 	transformImports(ast) {
 		const findNewPath = (node, originalImport) => {
 			const absoluteImportPath = filePathUtil.findAbsolutePathToImport(this.fileDir, originalImport);
@@ -103,7 +109,7 @@ class JavaScriptFileHandler extends AbstractFileHandler {
 				try {
 					importContents = fs.readFileSync(absoluteImportPath, "utf8");
 				} catch (ex) {
-					console.log(ex);
+					//console.log(ex);
 				}
 				const newImportAbsPath = dirUtil.getNewFilePath(absoluteImportPath, importContents, options);
 				let newRelativePath = relative(this.newFileDir, newImportAbsPath);
@@ -145,12 +151,20 @@ class JavaScriptFileHandler extends AbstractFileHandler {
 		this.transformImports(ast);
 		pluginsUtil.invokePlugins(plugins, ast, "beforeParseLines", this.newFileDir);
 
-		const newLines = [];
+		/*const newLines = [];
 		esprima.generateCodeFromAST(ast).split("\n").forEach((line) => {
 			newLines.push(this.transformLine(line));
 		});
+		ast = esprima.generateAST(newLines.join("\n"));*/
+		estraverse.traverse(ast, {
+			enter: (node, parent) => {
+				node.parent = parent;
+				if ((node.type === "CallExpression" || node.type === "MemberExpression") && !node.parent.transformed) {
+					this.transformNode(node);
+				}
+			}
+		});
 
-		ast = esprima.generateAST(newLines.join("\n"));
 		pluginsUtil.invokePlugins(plugins, ast, "afterParseLines", this.newFileDir);
 		pluginsUtil.invokePlugins(plugins, ast, "beforeTransformAfterParsing", this.newFileDir);
 

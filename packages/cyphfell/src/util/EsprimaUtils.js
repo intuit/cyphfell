@@ -500,6 +500,13 @@ class EsprimaUtils {
 	static regenerateAST(ast) {
 		return this.generateAST(this.generateCodeFromAST(ast));
 	}
+
+	static overwriteNode(node, newNode) {
+        Object.keys(node).forEach((key) => {
+            delete node[key];
+        });
+        Object.assign(node, newNode);
+	}
 }
 
 module.exports = EsprimaUtils;

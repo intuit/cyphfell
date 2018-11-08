@@ -33,7 +33,7 @@ The first argument is any option overrides to use, and the second option is any 
 2. yarn add cyphfell -D  
 3. node ./node_modules/cyphfell/cli.js 
 
-**NOTE: If you are using the CLI, make sure to pass in -v as an argument. This will generate the support/index.js file that allows the conversion to be more complete**
+**NOTE: If you are using the CLI, make sure to pass in *-v* as an argument. This will generate the support/index.js file that allows the conversion to be more complete. Your tests will not run without this.**
 
 ### Usage Notes:
 If you already have a Cypress folder in your project, the cypressFolder configuration option should point to a **different** location than your current cypress folder.  
