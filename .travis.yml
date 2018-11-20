@@ -1,6 +1,12 @@
 language: node_js
 node_js:
   - "8.11.2"
+before_script:
+  - cd packages/cyphfell
+  - yarn install
+  - cd ../cyphfell-test-app
+  - yarn install
+  - cd ../cyphfell
 script:
-  - cd packages/cyphfell && yarn install && sh ./test/test.sh
-  - cd ../cyphfell-test-app && yarn install && cd ../cyphfell && sh ./test-automation/run.sh
+  - sh ./test/test.sh
+  - cd ../cyphfell-test-app && sh ./test-automation/run.sh
