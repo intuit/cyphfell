@@ -2,6 +2,5 @@ language: node_js
 node_js:
   - "8.11.2"
 script:
-  - cd packages/cyphfell
-  - sh ./test/run.sh
-  - sh ./test-automation/run.sh
+  - cd packages/cyphfell && sh ./test/test.sh
+  - cd packages/cyphfell && sh ./test-automation/run.sh
