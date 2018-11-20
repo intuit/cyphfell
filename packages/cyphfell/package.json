@@ -1,6 +1,6 @@
 {
   "name": "cyphfell",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Converts automation tests into Cypress format",
   "main": "index.js",
   "scripts": {
