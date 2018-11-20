@@ -1,6 +1,9 @@
-<img src="https://www.intuit.com/content/dam/intuit/intuitcom/company/images/logo-intuit-preferred.png" alt="drawing" width="200"/>
 
 # Cyphfell
+
+<p align="center">
+<img src="./os-project-logo.svg" alt="drawing" width="200"/>
+</p>
 
 ### Converts WDIO automation tests to Cypress
 ##### Usage instructions can be found here in the ["Cyphfell" package readme](https://github.com/intuit/cyphfell/tree/master/packages/cyphfell#usage-steps)
