@@ -91,6 +91,9 @@ class JavaScriptFileHandler extends AbstractFileHandler {
 	}
 
 	transformNode(node) {
+		if (node.arguments && node.arguments[1] && (node.arguments[1].type === "ArrowFunctionExpression" || node.arguments[1].type === "FunctionExpression")) {
+			return;
+		}
 		const str = this.transformLine(esprima.generateCodeFromAST(node));
 		esprima.overwriteNode(node, esprima.generateAST(str).body[0].expression);
 		node.transformed = true;
@@ -151,11 +154,6 @@ class JavaScriptFileHandler extends AbstractFileHandler {
 		this.transformImports(ast);
 		pluginsUtil.invokePlugins(plugins, ast, "beforeParseLines", this.newFileDir);
 
-		/*const newLines = [];
-		esprima.generateCodeFromAST(ast).split("\n").forEach((line) => {
-			newLines.push(this.transformLine(line));
-		});
-		ast = esprima.generateAST(newLines.join("\n"));*/
 		estraverse.traverse(ast, {
 			enter: (node, parent) => {
 				node.parent = parent;

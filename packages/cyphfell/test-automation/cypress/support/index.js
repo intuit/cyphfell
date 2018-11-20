@@ -40,14 +40,7 @@ const initSpy = (method, win) => {
 	consoleSpies.push({level: method.toUpperCase(), spy: cy.spy(win.console, method)});
 };
 
-// TODO: move the define property into trinityjs
 Cypress.on("window:before:load", (win) => {
-	Object.defineProperty(win, "self", {
-		get: () => {
-			return window.top;
-		}
-	});
-
 	consoleSpies.length = 0;
 	initSpy("info", win);
 	initSpy("error", win);

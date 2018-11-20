@@ -1,26 +1,26 @@
 const initWaitFunctions = (obj) => {
 	obj.waitForEnabled = (selector, ms = Cypress.config("defaultCommandTimeout"), reverse) => {
-		return cy.get(selector).waitForEnabled(ms, reverse);
+		return cy.get(selector, {log: false}).waitForEnabled(ms, reverse);
 	};
 
 	obj.waitForExist = (selector, ms = Cypress.config("defaultCommandTimeout"), reverse) => {
-		return cy.get(selector).waitForExist(ms, reverse);
+		return cy.get(selector, {log: false}).waitForExist(ms, reverse);
 	};
 
 	obj.waitForSelected = (selector, ms = Cypress.config("defaultCommandTimeout"), reverse) => {
-		cy.get(selector).waitForSelected(ms, reverse);
+		cy.get(selector, {log: false}).waitForSelected(ms, reverse);
 	};
 
 	obj.waitForText = (selector, ms = Cypress.config("defaultCommandTimeout"), reverse) => {
-		return cy.get(selector, {timeout: ms}).getText().should(reverse ? "be.equal" : "not.be.equal", "");
+		return cy.get(selector, {timeout: ms, log: false}).getText().should(reverse ? "be.equal" : "not.be.equal", "");
 	};
 
 	obj.waitForValue = (selector, ms = Cypress.config("defaultCommandTimeout"), reverse) => {
-		return cy.get(selector, {timeout: ms}).waitForValue(ms, reverse);
+		return cy.get(selector, {timeout: ms, log: false}).waitForValue(ms, reverse);
 	};
 
 	obj.waitForVisible = (selector, ms = Cypress.config("defaultCommandTimeout"), reverse) => {
-		return cy.get(selector, {timeout: ms}).should(reverse ? "not.be.visible" : "be.visible").then(() => !reverse);
+		return cy.get(selector, {timeout: ms, log: false}).should(reverse ? "not.be.visible" : "be.visible").then(() => !reverse);
 	};
 
 	// TODO: integrate interval and timeoutMsg
@@ -33,10 +33,10 @@ const initWaitFunctions = (obj) => {
 			condition.then(() => {
 				object.resultSet = true;
 			});
-			return cy.wrap(object, {timeout: 60000}).its("resultSet").should("be.true");
+			return cy.wrap(object, {timeout: 60000, log: false}).its("resultSet").should("be.true");
 		}
 
-		return cy.wrap(null, {timeout: ms}).should(() => {
+		return cy.wrap(null, {timeout: ms, log: false}).should(() => {
 			expect(!!condition()).to.be.equal(true);
 		});
 	};
@@ -55,20 +55,20 @@ const initUtilFunctions = (obj) => {
 			object.result = err;
 			object.resultSet = true;
 		});
-		cy.wrap(object, {timeout: 60000}).its("resultSet").should("be.true");
+		cy.wrap(object, {timeout: 60000, log: false}).its("resultSet").should("be.true");
 		return cy.wrap(object, {timeout: 60000}).its("result");
 	};
 
 	obj.execute = (fn, ...rest) => {
 		return cy.window().then((window) => {
 			const result = fn.apply(this, rest);
-			return cy.wrap(result ? result : null);
+			return cy.wrap(result ? result : null, {log: false});
 		});
 	};
 
 	obj.addCommand = (name, fn) => {
 		obj[name] = fn;
-		return cy.wrap(null);
+		return cy.wrap(null, {log: false});
 	};
 
 	obj.setCookie = (cookie) => {
@@ -100,11 +100,15 @@ const initUtilFunctions = (obj) => {
 			});
 		}
 	};
+
+	// TODO: implement this
+	obj.timeouts = () => {
+	};
 };
 
 const initActionFunctions = (obj) => {
 	obj.setValue = (selector, value) => {
-		cy.get(selector).setValue(value);
+		cy.get(selector, {log: false}).setValue(value);
 	};
 	obj.getAttribute = (selector, attribute) => {
 		return cy.getAttribute(selector, attribute);
@@ -164,7 +168,7 @@ const initEventFunctions = (obj) => {
 
 const initElementIdFunctions = (obj) => {
 	obj.elementIdAttribute = (element, attribute) => {
-		return cy.wrap(element).getAttribute(attribute).then((res) => {
+		return cy.wrap(element, {log: false}).getAttribute(attribute).then((res) => {
 			return {
 				value: res
 			};
@@ -172,7 +176,7 @@ const initElementIdFunctions = (obj) => {
 	};
 
 	obj.elementIdCssProperty = (element, attribute) => {
-		return cy.wrap(element).getCssProperty(attribute).then((res) => {
+		return cy.wrap(element, {log: false}).getCssProperty(attribute).then((res) => {
 			return {
 				value: res
 			};
@@ -180,7 +184,7 @@ const initElementIdFunctions = (obj) => {
 	};
 
 	obj.elementIdDisplayed = (element) => {
-		return cy.wrap(element).isVisible().then((res) => {
+		return cy.wrap(element, {log: false}).isVisible().then((res) => {
 			return {
 				value: res
 			};
@@ -188,7 +192,7 @@ const initElementIdFunctions = (obj) => {
 	};
 
 	obj.elementIdElement = (element, selector) => {
-		return cy.wrap(element).findFirst(selector).then((res) => {
+		return cy.wrap(element, {log: false}).findFirst(selector).then((res) => {
 			return {
 				value: res
 			};
@@ -196,7 +200,7 @@ const initElementIdFunctions = (obj) => {
 	};
 
 	obj.elementIdElements = (element, selector) => {
-		return cy.wrap(element).find(selector).then((res) => {
+		return cy.wrap(element, {log: false}).find(selector).then((res) => {
 			return {
 				value: res
 			};
@@ -204,7 +208,7 @@ const initElementIdFunctions = (obj) => {
 	};
 
 	obj.elementIdEnabled = (element) => {
-		return cy.wrap(element).isEnabled().then((res) => {
+		return cy.wrap(element, {log: false}).isEnabled().then((res) => {
 			return {
 				value: res
 			};
@@ -212,7 +216,7 @@ const initElementIdFunctions = (obj) => {
 	};
 
 	obj.elementIdLocation = (element) => {
-		return cy.wrap(element).getLocation().then((res) => {
+		return cy.wrap(element, {log: false}).getLocation().then((res) => {
 			return {
 				value: res
 			};
@@ -220,7 +224,7 @@ const initElementIdFunctions = (obj) => {
 	};
 
 	obj.elementIdLocationInView = (element) => {
-		return cy.wrap(element).getLocationInView().then((res) => {
+		return cy.wrap(element, {log: false}).getLocationInView().then((res) => {
 			return {
 				value: res
 			};
@@ -228,7 +232,7 @@ const initElementIdFunctions = (obj) => {
 	};
 
 	obj.elementIdName = (element) => {
-		return cy.wrap(element).getNodeName().then((res) => {
+		return cy.wrap(element, {log: false}).getNodeName().then((res) => {
 			return {
 				value: res
 			};
@@ -236,7 +240,7 @@ const initElementIdFunctions = (obj) => {
 	};
 
 	obj.elementIdSelected = (element) => {
-		return cy.wrap(element).isSelected().then((res) => {
+		return cy.wrap(element, {log: false}).isSelected().then((res) => {
 			return {
 				value: res
 			};
@@ -244,7 +248,7 @@ const initElementIdFunctions = (obj) => {
 	};
 
 	obj.elementIdSize = (element) => {
-		return cy.wrap(element).getElementSize().then((res) => {
+		return cy.wrap(element, {log: false}).getElementSize().then((res) => {
 			return {
 				value: res
 			};
@@ -252,7 +256,7 @@ const initElementIdFunctions = (obj) => {
 	};
 
 	obj.elementIdText = (element) => {
-		return cy.wrap(element).getText().then((res) => {
+		return cy.wrap(element, {log: false}).getText().then((res) => {
 			return {
 				value: res
 			};

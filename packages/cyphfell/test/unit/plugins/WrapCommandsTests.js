@@ -74,6 +74,23 @@ describe("Tests WrapElementActionsPlugin", function() {
 		`));
 	});
 
+	it("Tests attempting to wrap isVisible() when starting a chain", () => {
+        const ast = esprima.generateAST(`cy.get(".abc").then((abc) => {
+        		cy.isVisible(abc);
+            });`);
+        const copy = _.cloneDeep(ast);
+        instance.afterTransformAfterParsing(ast);
+        expect(ast).to.deep.equal(copy);
+	});
+
+	it("Tests wrapping isVisible() when not starting a chain", () => {
+        const ast = esprima.generateAST(`cy.get(".abc").then((abc) => {
+        		abc.isVisible();
+            });`);
+        instance.afterTransformAfterParsing(ast);
+        expect(esprima.regenerateAST(ast)).to.deep.equal(esprima.generateAST("cy.get(\".abc\").isVisible();;"));
+	});
+
 	it("Tests plugin name", () => {
 		expect(instance.getName()).to.be.equal("WrapElementActions");
 	});

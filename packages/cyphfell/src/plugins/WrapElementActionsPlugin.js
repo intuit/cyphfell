@@ -3,6 +3,7 @@ const estraverse = require("estraverse");
 const commandsToWrap = require("../constants/CommandsToWrap");
 const _ = require("lodash");
 const esprima = require("../util/EsprimaUtils");
+const optionalCommandsToWrap = require("../constants/OptionalCommandsToWrap");
 
 const wrapActions = (ast) => {
 	estraverse.traverse(ast, {
@@ -14,27 +15,35 @@ const wrapActions = (ast) => {
 				estraverse.traverse(node.arguments[0], {
 					enter: (functionNode) => {
 						// if this is a literal or an entry from an array and a browser command is being invoked on it, wrap the invoked object with cy.wrap()
-						if (functionNode.type === "CallExpression" && functionNode.callee.property && functionNode.callee.property.name
-							&& commandsToWrap.includes(functionNode.callee.property.name) && (functionNode.callee.object.type === "Identifier" ||
-								(functionNode.callee.object.type === "MemberExpression" && functionNode.callee.object.computed && functionNode.callee.object.object.type === "Identifier" && functionNode.callee.object.property.type === "Literal"))) {
-							const copy = _.cloneDeep(functionNode.callee.object);
-							Object.assign(functionNode.callee.object, {
-								type: "CallExpression",
-								callee: {
-									type: "MemberExpression",
-									object: {
-										type: "Identifier",
-										name: "cy"
-									},
-									property: {
-										type: "Identifier",
-										name: "wrap"
-									},
-									computed: false
-								},
-								arguments: [copy]
-							});
-							delete functionNode.callee.object.name;
+						if (functionNode.type === "CallExpression" && functionNode.callee.property && functionNode.callee.property.name) {
+							let shouldWrap = commandsToWrap.includes(functionNode.callee.property.name) && (functionNode.callee.object.type === "Identifier" ||
+                                (functionNode.callee.object.type === "MemberExpression" && functionNode.callee.object.computed && functionNode.callee.object.object.type === "Identifier" && functionNode.callee.object.property.type === "Literal"));
+							if (!shouldWrap) {
+								shouldWrap = optionalCommandsToWrap.includes(functionNode.callee.property.name) && (functionNode.callee.object.type === "Identifier" ||
+                                    (functionNode.callee.object.type === "MemberExpression" && functionNode.callee.object.computed && functionNode.callee.object.object.type === "Identifier" && functionNode.callee.object.property.type === "Literal"))
+								&& functionNode.callee.object.name !== "cy";
+							}
+
+							if (shouldWrap) {
+                                const copy = _.cloneDeep(functionNode.callee.object);
+                                Object.assign(functionNode.callee.object, {
+                                    type: "CallExpression",
+                                    callee: {
+                                        type: "MemberExpression",
+                                        object: {
+                                            type: "Identifier",
+                                            name: "cy"
+                                        },
+                                        property: {
+                                            type: "Identifier",
+                                            name: "wrap"
+                                        },
+                                        computed: false
+                                    },
+                                    arguments: [copy]
+                                });
+                                delete functionNode.callee.object.name;
+                            }
 						}
 					}
 				});
@@ -70,12 +79,12 @@ const simplifyWraps = (ast) => {
 					} else if (currentNode.type === "ExpressionStatement" && currentNode.expression.callee) {
 						allWrapped = isWrap(currentNode.expression, node.arguments[0].params[0].name);
 						if (allWrapped) {
-							wrappedFunctions.push(currentNode.expression.callee.property.name);
+							wrappedFunctions.push({func: currentNode.expression.callee.property.name, args: currentNode.expression.arguments});
 						}
 					} else if (currentNode.type === "ReturnStatement" && currentNode.argument && currentNode.argument.type === "CallExpression") {
 						allWrapped = isWrap(currentNode.argument, node.arguments[0].params[0].name);
 						if (allWrapped) {
-							wrappedFunctions.push(currentNode.argument.callee.property.name);
+							wrappedFunctions.push({func: currentNode.argument.callee.property.name, args: currentNode.argument.arguments});
 						}
 					} else {
 						allWrapped = false;
@@ -86,8 +95,20 @@ const simplifyWraps = (ast) => {
 					}
 				}
 				if (allWrapped) {
-					let code = esprima.generateCodeFromAST(node).split(".then")[0];
-					code += "." + wrappedFunctions.join("().") + "()";
+					let code = esprima.generateCodeFromAST(node).split(".then")[0] + ".";
+					wrappedFunctions.forEach((func, i) => {
+						code += `${func.func}(`;
+						func.args.forEach((arg, index) => {
+                            code += esprima.generateCodeFromAST(arg);
+                            if (index !== func.args.length - 1) {
+                            	code += ",";
+							}
+						});
+                        code += ")";
+                        if (i !== wrappedFunctions.length - 1) {
+                        	code += "."
+						}
+					});
 					Object.assign(node, esprima.generateAST(code).body[0]);
 				}
 			}

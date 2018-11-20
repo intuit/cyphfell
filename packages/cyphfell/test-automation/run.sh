@@ -8,24 +8,7 @@ copy_support_file() {
     sed -i '' -e 's/cyphfell/\.\.\/\.\.\/\.\./g' test-automation/cypress/support/index.js
 }
 
-# TODO: consider using set -e instead of this method
-check_for_failures() {
-    if [ -e test-automation/cypress/screenshots ] || [ -e test-automation/automationErrors.log ]
-    then
-        echo "An uncaught error was encountered during automation testing"
-        exit 1
-    fi
-}
-
-if [ -e test-automation/cypress/screenshots ]
-then
-    rm -r test-automation/cypress/screenshots
-fi
-
-if [ -e test-automation/automationErrors.log ]
-then
-    rm test-automation/automationErrors.log
-fi
+set -e
 
 # copy the necessary files for running automation
 cp ./defaultFiles/defaultPluginFile.js ./test-automation/cypress/plugins/index.js
@@ -39,8 +22,6 @@ yarn start &
 sleep 7
 
 cypress run -b chrome --spec "**/*/!(DataCaptureHookTests).spec.js"
-check_for_failures
 
 cat test-automation/wdioConfigInitData.js >> test-automation/cypress/support/index.js
 cypress run -b chrome --spec **/*/DataCaptureHookTests.spec.js
-check_for_failures
