@@ -9,4 +9,4 @@ before_script:
   - cd ../cyphfell
 script:
   - sh ./test/test.sh
-  - cd ../cyphfell-test-app && sh ./test-automation/run.sh
+  - sh ./test-automation/run.sh
