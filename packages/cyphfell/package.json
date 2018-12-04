@@ -7,6 +7,9 @@
     "test": "./node_modules/.bin/mocha --recursive --g \"./test/**/*.js\"  test",
     "start": "cd ../cyphfell-test-app && export BROWSER='none' && yarn start && cd ../Cyphfell"
   },
+  "bin": {
+    "cyphfell": "./cli.js"
+  },
   "keywords": [],
   "author": "",
   "license": "Apache License 2.0",
